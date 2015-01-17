@@ -46,7 +46,7 @@ public class DBManager {
                 " QUANTITY INTEGER, " + 
                 " BEST_BY DATE, " + 
                 " PRICE DOUBLE, " +
-                " IMAGE_PATH STRING) "; 
+                " IMAGE_PATH LONG VARCHAR) "; 
 		String createSpecials = "CREATE TABLE SPECIALS (" +
 				" SPECIAL_ID INTEGER NOT NULL PRIMARY KEY GENERATED ALWAYS AS IDENTITY (START WITH 1, INCREMENT BY 1), " +
                 " DISCOUNT INTEGER, " +
@@ -77,6 +77,7 @@ public class DBManager {
 	}
 	
 	public DBManager(){
+		setDBDir();
 		try {
 			Class.forName("org.apache.derby.jdbc.EmbeddedDriver");
 		} catch (ClassNotFoundException e) {
@@ -84,7 +85,7 @@ public class DBManager {
 			e.printStackTrace();
 		}
 		dbConnection = null;
-		String strUrl = "jdbc:derby:ShopDB;user=dbuser;password=dbuserpwd";
+		String strUrl = "jdbc:derby:ShopDB;";
 		try {
 		    dbConnection = DriverManager.getConnection(strUrl);
 		} catch (SQLException sqle) {
@@ -98,12 +99,18 @@ public class DBManager {
 	
 	protected void addItemToDb(String name, int quantity, Date best_by, double price, String image_path){
 		try {
-			Statement query = dbConnection.createStatement();
-			query.execute("INSERT INTO ITEMS (ITEM_NAME, QUANTITY, BEST_BUY, PRICE, IMAGE_PATH)"+
-					"VALUES ("+name+", "+quantity+", "+best_by+", "+price+", "+image_path+")");
+			String toExecute = "INSERT INTO ITEMS (ITEM_NAME, QUANTITY, BEST_BY, PRICE, IMAGE_PATH) VALUES (?, ?, ?, ?, ?)";
+			PreparedStatement query = dbConnection.prepareStatement(toExecute);
+			query.setString(1, name);
+			query.setInt(2,  quantity);
+			query.setDate(3, best_by);
+			query.setDouble(4,  price);
+			query.setString(5, image_path);
+			query.execute();
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 	}
+
 }

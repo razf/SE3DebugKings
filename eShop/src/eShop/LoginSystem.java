@@ -51,11 +51,15 @@ public class LoginSystem implements ILoginSystem {
 	@Override
 	public void LoginToSystem(String username, String password)
 			throws UserNotFoundException, IncorrectPasswordException, SQLException {
-		Statement query = shopDB.getConnection().createStatement();
-		ResultSet queryResult = query.executeQuery("SELECT USERNAME FROM USERS WHERE USERNAME = " + username);
+		PreparedStatement query = shopDB.getConnection().prepareStatement("SELECT USERNAME FROM USERS WHERE USERNAME = ?");
+		query.setString(1, username);
+		ResultSet queryResult = query.executeQuery();
 		if(!queryResult.next())
 			throw new UserNotFoundException();
-		ResultSet secondQueryResult = query.executeQuery("SELECT USERNAME FROM USERS WHERE USERNAME = " + username + " AND PASSWORD = " + password);
+		PreparedStatement secondQuery = shopDB.getConnection().prepareStatement("SELECT USERNAME FROM USERS WHERE USERNAME = ? AND PASSWORD = ?");
+		secondQuery.setString(1, username);
+		secondQuery.setString(2, password);
+		ResultSet secondQueryResult = secondQuery.executeQuery();
 		if(!secondQueryResult.next())
 			throw new IncorrectPasswordException();
 	}
@@ -72,9 +76,14 @@ public class LoginSystem implements ILoginSystem {
 	public void RegisterUser(String username, String password, String email,
 			String cardNumber, String company)
 			throws SQLException {
-		Statement query = shopDB.getConnection().createStatement();
-		query.execute("INSERT INTO USERS (USERNAME, PASSWORD, EMAIL, CREDIT_NUM, CREDIT_COMPANY)"+
-				"VALUES ("+username+", "+password+", "+email+", "+cardNumber+", "+company+")");
+		PreparedStatement query = shopDB.getConnection().prepareStatement("INSERT INTO USERS (USERNAME, PASSWORD, EMAIL, CREDIT_NUM, CREDIT_COMPANY)"+
+				" VALUES (?, ?, ?, ?, ?)");
+		query.setString(1, username);
+		query.setString(2, password);
+		query.setString(3, email);
+		query.setString(4, cardNumber);
+		query.setString(5, company);
+		query.execute();
 	}
 
 	@Override

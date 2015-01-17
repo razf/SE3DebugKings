@@ -1,6 +1,7 @@
 package eShop;
 import java.sql.*;
 
+@SuppressWarnings("serial")
 public interface ILoginSystem {
 	enum PasswordRank{
 		LOW, MEDIUM, HIGH

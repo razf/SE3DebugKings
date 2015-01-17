@@ -1,4 +1,4 @@
-Fri Jan 16 16:53:55 IST 2015 Thread[main,5,main] Cleanup action starting
+Sat Jan 17 14:50:31 IST 2015 Thread[main,5,main] Cleanup action starting
 java.sql.SQLException: Database 'ShopDB' not found.
 	at org.apache.derby.impl.jdbc.SQLExceptionFactory40.getSQLException(Unknown Source)
 	at org.apache.derby.impl.jdbc.Util.newEmbedSQLException(Unknown Source)
@@ -14,8 +14,8 @@ java.sql.SQLException: Database 'ShopDB' not found.
 	at org.apache.derby.jdbc.AutoloadedDriver.connect(Unknown Source)
 	at java.sql.DriverManager.getConnection(Unknown Source)
 	at java.sql.DriverManager.getConnection(Unknown Source)
-	at eShop.DBManager.<init>(DBManager.java:87)
-	at eShopTests.DBTest.testCreation(DBTest.java:18)
+	at eShop.DBManager.<init>(DBManager.java:89)
+	at eShopTests.DBTest.testCreation(DBTest.java:19)
 	at sun.reflect.NativeMethodAccessorImpl.invoke0(Native Method)
 	at sun.reflect.NativeMethodAccessorImpl.invoke(Unknown Source)
 	at sun.reflect.DelegatingMethodAccessorImpl.invoke(Unknown Source)
@@ -61,8 +61,8 @@ java.sql.SQLException: Database 'ShopDB' not found.
 	at org.apache.derby.jdbc.AutoloadedDriver.connect(Unknown Source)
 	at java.sql.DriverManager.getConnection(Unknown Source)
 	at java.sql.DriverManager.getConnection(Unknown Source)
-	at eShop.DBManager.<init>(DBManager.java:87)
-	at eShopTests.DBTest.testCreation(DBTest.java:18)
+	at eShop.DBManager.<init>(DBManager.java:89)
+	at eShopTests.DBTest.testCreation(DBTest.java:19)
 	at sun.reflect.NativeMethodAccessorImpl.invoke0(Native Method)
 	at sun.reflect.NativeMethodAccessorImpl.invoke(Unknown Source)
 	at sun.reflect.DelegatingMethodAccessorImpl.invoke(Unknown Source)
@@ -89,8 +89,8 @@ java.sql.SQLException: Database 'ShopDB' not found.
 ============= end nested exception, level (1) ===========
 Cleanup action completed
 ----------------------------------------------------------------
-Fri Jan 16 16:53:55 IST 2015:
-Booting Derby version The Apache Software Foundation - Apache Derby - 10.10.1.3 - (1557168): instance a816c00e-014a-f33c-7d40-000000c280b0 
+Sat Jan 17 14:50:31 IST 2015:
+Booting Derby version The Apache Software Foundation - Apache Derby - 10.10.1.3 - (1557168): instance a816c00e-014a-f7f1-e0aa-000000c19ca0 
 on database directory C:\Program Files\Technion\Semester_5\Shitot_236321\HW3\eShop\ShopDB with class loader sun.misc.Launcher$AppClassLoader@1453f44 
 Loaded from file:/C:/Users/rtal/jdk1.8.0_25/db/lib/derby.jar
 java.vendor=Oracle Corporation
