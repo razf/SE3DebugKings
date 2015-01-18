@@ -175,7 +175,7 @@ public class SignUpForm extends Composite {
 		
 		Label PasswordDetailsLabel = new Label(this, SWT.WRAP);
 		PasswordDetailsLabel.setBounds(200, 184, 330, 31);
-		PasswordDetailsLabel.setText("Your password should contain at least one lowercase letter and one number, and should be at least 6 characters long!");
+		PasswordDetailsLabel.setText("Your password should contain at least one lowercase letter and one number, and should be between 6-12 characters long!");
 		
 		emailExistsError = new Label(this, SWT.WRAP);
 		emailExistsError.setText("An account with this email adress already exists!");

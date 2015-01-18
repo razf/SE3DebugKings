@@ -15,13 +15,19 @@ public class GuiTexting {
 		// TODO Auto-generated method stub
 		Display display = new Display();
 		Shell shell = new Shell(display);
-		shell.setSize(600,400);
+		shell.setSize(800,600);
 		shell.open();
 		ILoginSystem ls = new DummyLoginSystem();
-		LoginForm l = new LoginForm(shell, SWT.NONE, ls);
+//		LoginForm l = new LoginForm(shell, SWT.NONE, ls);
 		
-		shell.setSize(l.getSize());
+		CartDisplay c = new CartDisplay(shell, SWT.NONE);
+		
+
 		shell.pack();
+
+		c.pack();
+		shell.setSize(850,650);
+
 		while (!shell.isDisposed()) {
 			if (!display.readAndDispatch()) {
 				display.sleep();
