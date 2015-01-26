@@ -1,9 +1,12 @@
 package eShop;
+import java.sql.*;
 
-
-public interface ILoginSystem {
+@SuppressWarnings("serial")
+public interface ILoginSystem { ////change//change//change
+	enum PasswordRank{
+		LOW, MEDIUM, HIGH
+	}
 	
-	class RegistrationErrorException extends RuntimeException {}
 	class LoginFormException extends Exception {}
 	class UserNotFoundException extends LoginFormException {}
 	class IncorrectPasswordException extends LoginFormException {}
@@ -19,25 +22,27 @@ public interface ILoginSystem {
 
 	
 	void isUsernameValid(String username) throws UsernameAlreadyExistsException,
-													IllegalUsernameException;
+													IllegalUsernameException, SQLException;
 	
-	void isEmailValid(String email) throws IllegalEmailException, EmailAlreadyExistsException;
+	void isEmailValid(String email) throws IllegalEmailException, EmailAlreadyExistsException, SQLException;
 	
 	//return 1 for low, 2 for medium, 3 for strong
-	int checkPasswordStrengh(String password);
+	PasswordRank checkPasswordStrengh(String password) throws IllegalPasswordException;
 	
 	void LoginToSystem(String username, String password) throws UserNotFoundException, 
-																IncorrectPasswordException;
+																IncorrectPasswordException, SQLException;
 	
 	
-	void CheckCreditCardDetails(String cardNumber, String company) throws InvalidCardNumberException;
+	void CheckCreditCardDetails(String cardNumber) throws InvalidCardNumberException, SQLException;
 	
-	void RegisterUser(String username, String password, String email, String cardNumber, String company) throws RegistrationErrorException;
+	void RegisterUser(String username, String password, String email, String cardNumber, String company) throws SQLException;
 	
 	void RecoverLostPassword(String email, String username) throws IllegalUsernameException, 
 																	UnableToSendMailException, 
-																	UsernameDoesntExistException;
+																	UsernameDoesntExistException,
+																	SQLException;
 	
 	void RecoverLostPassword(String email) throws UnableToSendMailException, 
-													EmailDoesntExistException;
+													EmailDoesntExistException,
+													SQLException;
 }

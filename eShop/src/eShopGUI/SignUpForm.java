@@ -1,5 +1,7 @@
 package eShopGUI;
 
+import java.sql.SQLException;
+
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.SWT;
@@ -222,7 +224,11 @@ public class SignUpForm extends Composite {
 			UsernameText.setBackground(SWTResourceManager.getColor(255, 218, 186));
 			invalidUsernameError.setVisible(false);
 			usernameExistsError.setVisible(true);
+		} catch (SQLException e){
+			System.out.println("Houston, we've got a problem...");
+			throw new RuntimeException();
 		}
+		
 	}
 	
 	private void CheckPasswordsMatch() {
@@ -242,30 +248,36 @@ public class SignUpForm extends Composite {
 	}
 	
 	private void CheckPasswordStrengh() {
-		int strength = origin.LoginSystem.checkPasswordStrengh(PasswordText.getText());
-		passwordStrengh.setVisible(!PasswordText.getText().equals(""));
-		if(PasswordText.getText().equals("")){
-			PasswordText.setBackground(SWTResourceManager.getColor(SWT.COLOR_WHITE));
-			return;
-		}
-		switch(strength) {
-		case 2:
-			passwordStrengh.setText("Medium");
-			passwordStrengh.setForeground(SWTResourceManager.getColor(255, 215, 0));
-			PasswordText.setBackground(SWTResourceManager.getColor(152, 251, 152));
-			break;
-		case 3:
-			passwordStrengh.setText("High");
-			passwordStrengh.setForeground(SWTResourceManager.getColor(0, 128, 0));
-			PasswordText.setBackground(SWTResourceManager.getColor(152, 251, 152));
-			break;
-
-		default:
+		try {
+			PasswordRank strength = origin.LoginSystem.checkPasswordStrengh(PasswordText.getText());
+			passwordStrengh.setVisible(!PasswordText.getText().equals(""));
+			if(PasswordText.getText().equals("")){
+				PasswordText.setBackground(SWTResourceManager.getColor(SWT.COLOR_WHITE));
+				return;
+			}
+			switch(strength) {
+			case MEDIUM:
+				passwordStrengh.setText("Medium");
+				passwordStrengh.setForeground(SWTResourceManager.getColor(255, 215, 0));
+				PasswordText.setBackground(SWTResourceManager.getColor(152, 251, 152));
+				break;
+			case HIGH:
+				passwordStrengh.setText("High");
+				passwordStrengh.setForeground(SWTResourceManager.getColor(0, 128, 0));
+				PasswordText.setBackground(SWTResourceManager.getColor(152, 251, 152));
+				break;
+	
+			default:
+				passwordStrengh.setText("Low");
+				passwordStrengh.setForeground(SWTResourceManager.getColor(SWT.COLOR_RED));
+				PasswordText.setBackground(SWTResourceManager.getColor(255, 218, 186));
+				break;
+	
+			}
+		} catch (IllegalPasswordException e){
 			passwordStrengh.setText("Low");
 			passwordStrengh.setForeground(SWTResourceManager.getColor(SWT.COLOR_RED));
 			PasswordText.setBackground(SWTResourceManager.getColor(255, 218, 186));
-			break;
-
 		}
 	}
 	
@@ -287,6 +299,9 @@ public class SignUpForm extends Composite {
 			EmailText.setBackground(SWTResourceManager.getColor(255, 218, 186));
 			invalidEmailError.setVisible(false);
 			emailExistsError.setVisible(true);
+		} catch (SQLException e){
+			System.out.println("Houston, we've got a problem...");
+			throw new RuntimeException();
 		}
 	}
 	
@@ -295,25 +310,33 @@ public class SignUpForm extends Composite {
 			if(CardNumberText.getText().equals("")) {
 				CardNumberText.setBackground(SWTResourceManager.getColor(SWT.COLOR_WHITE));
 			} else {
-				origin.LoginSystem.CheckCreditCardDetails(CardNumberText.getText(), CardCompanyCombo.getText());
+				origin.LoginSystem.CheckCreditCardDetails(CardNumberText.getText());
 				CardNumberText.setBackground(SWTResourceManager.getColor(152, 251, 152));
 			}
 			invalidCardError.setVisible(false);
 		} catch (InvalidCardNumberException e) {
 			CardNumberText.setBackground(SWTResourceManager.getColor(255, 218, 186));
 			invalidCardError.setVisible(true);
-		} 
+		} catch (SQLException e){
+			System.out.println("Houston, we've got a problem...");
+			throw new RuntimeException();
+		}
 	}
 	
 	private void Register() {
-		CheckUsernameValidity();
-		CheckPasswordsMatch();
-		CheckPasswordStrengh();
-		CheckEmailValidity();
-		CheckCreditCardValidity();
-		if(isOk(UsernameText) && isOk(PasswordText) && isOk(PasswordText2) && isOk(EmailText) && isOk(CardNumberText)) {
-			origin.LoginSystem.RegisterUser(UsernameText.getText(), PasswordText.getText(), EmailText.getText(), CardNumberText.getText(), CardCompanyCombo.getText());
-			Return();
+		try {
+			CheckUsernameValidity();
+			CheckPasswordsMatch();
+			CheckPasswordStrengh();
+			CheckEmailValidity();
+			CheckCreditCardValidity();
+			if(isOk(UsernameText) && isOk(PasswordText) && isOk(PasswordText2) && isOk(EmailText) && isOk(CardNumberText)) {
+				origin.LoginSystem.RegisterUser(UsernameText.getText(), PasswordText.getText(), EmailText.getText(), CardNumberText.getText(), CardCompanyCombo.getText());
+				Return();
+			}
+		} catch (SQLException e){
+			System.out.println("Houston, we've got a problem...");
+			throw new RuntimeException();
 		}
 	}
 	

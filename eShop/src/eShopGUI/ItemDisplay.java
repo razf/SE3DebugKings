@@ -1,6 +1,6 @@
 package eShopGUI;
 
-import java.util.Date;
+import java.util.Calendar;
 
 import javax.xml.crypto.Data;
 
@@ -24,16 +24,17 @@ public class ItemDisplay extends Composite {
 	int barcode;
 	Double discount;
 	Spinner quantitySpinner;
-	Date best_by;
+	Calendar best_by;
 
 	/**
 	 * Create the composite.
 	 * @param parent
 	 * @param style
 	 */
-	public ItemDisplay(Composite parent, int style, int barcode, String name, String price, double discount, Date best_by) {
+	public ItemDisplay(Composite parent,  int style, CartDisplay cart, int barcode, String name, String price, double discount, Calendar best_by) {
 		super(parent, style);
 		
+		Cart = cart;
 		this.barcode = barcode;
 		this.discount = discount;
 		
@@ -41,16 +42,6 @@ public class ItemDisplay extends Composite {
 		ItemImage.setImage(SWTResourceManager.getImage("Images\\Milk.png"));
 		ItemImage.setBounds(15, 10, 100, 105);
 		
-		Button BuyButton = new Button(this, SWT.WRAP);
-		BuyButton.addSelectionListener(new SelectionAdapter() {
-			@Override
-			public void widgetSelected(SelectionEvent e) {
-				AddToCart(barcode,quantitySpinner.getDigits());
-			}
-		});
-		BuyButton.setSelection(true);
-		BuyButton.setBounds(10, 232, 66, 38);
-		BuyButton.setText("Add To Cart");
 		
 		Label ItemNameLabel = new Label(this, SWT.WRAP);
 		ItemNameLabel.setFont(SWTResourceManager.getFont("Segoe UI", 11, SWT.NORMAL));
@@ -85,12 +76,24 @@ public class ItemDisplay extends Composite {
 		
 		Label BestByLabel = new Label(this, SWT.NONE);
 		BestByLabel.setBounds(15, 165, 100, 15);
-		BestByLabel.setText("Best by:");
+		BestByLabel.setText("Best by: "+best_by.toString());
 		
+		Button BuyButton = new Button(this, SWT.WRAP);
+		BuyButton.addSelectionListener(new SelectionAdapter() {
+			@Override
+			public void widgetSelected(SelectionEvent e) {
+				double shop_price = Double.parseDouble(price)-(Double.parseDouble(price)*(discount/100));
+				AddToCart(ItemNameLabel.getText(),barcode, shop_price ,quantitySpinner.getSelection(), best_by, false);
+			}
+		});
+		BuyButton.setSelection(true);
+		BuyButton.setBounds(10, 232, 66, 38);
+		BuyButton.setText("Add To Cart");
+
 	}
 
-	private void AddToCart(int barcode, int amount) {
-		Cart.addToCart(barcode, amount);
+	private void AddToCart(String name, int barcode,double price ,int amount, Calendar date, boolean isFree) {
+		Cart.addToCart(name, barcode, price , amount, date, isFree, discount, false);
 		
 	}
 

@@ -1,5 +1,7 @@
 package eShopGUI;
 
+import java.sql.SQLException;
+
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Text;
 import org.eclipse.swt.SWT;
@@ -113,7 +115,9 @@ public class LoginForm extends Composite {
 		} catch (IncorrectPasswordException e) {
 			PasswordErrorLabel.setVisible(true);
 			UsernameErrorLabel.setVisible(false);
-
+		} catch (SQLException e){
+			System.out.println("Houston, we've got a problem...");
+			throw new RuntimeException();
 		}
 	}
 	

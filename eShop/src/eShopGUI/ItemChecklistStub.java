@@ -1,5 +1,7 @@
 package eShopGUI;
 
+import eShop.Item;
+import eShop.IShoppingCart.Sale;
 import java.text.DecimalFormat;
 
 import org.eclipse.swt.widgets.Composite;
@@ -17,18 +19,21 @@ public class ItemChecklistStub extends Composite {
 	CartDisplay Cart;
 	Composite parent;
 	Double price;
-	CartDisplay.Item item;
+	Item item;
 	boolean hasDiscount;
 	Label priceLabel;
 	boolean isFree;
 	DecimalFormat numberFormat;
+	public ItemChecklistStub saleStub;
+	Spinner QuantitySpinner;
+	public Sale sale;
 	
 	/**
 	 * Create the composite.
 	 * @param parent
 	 * @param style
 	 */
-	public ItemChecklistStub(Composite parent, int style, CartDisplay Cart , CartDisplay.Item item, boolean hasDiscount, boolean isFree) {
+	public ItemChecklistStub(Composite parent, int style, CartDisplay Cart , Item item, boolean hasDiscount, boolean isFree) {
 		super(parent, SWT.NONE);
 		this.parent = parent;
 		
@@ -39,6 +44,9 @@ public class ItemChecklistStub extends Composite {
 		this.isFree = isFree;
 		this.item = item;
 		
+		saleStub = null;
+		sale = null;
+
 		Composite background = new Composite(this, SWT.NONE);
 		background.setBounds(0, 0, 225, 46);
 		
@@ -48,7 +56,7 @@ public class ItemChecklistStub extends Composite {
 		ItemNameLabel.setFont(SWTResourceManager.getFont("Segoe UI", 9, SWT.NORMAL));
 		ItemNameLabel.setText(item.name);
 		
-		Spinner QuantitySpinner = new Spinner(background, SWT.BORDER);
+		QuantitySpinner = new Spinner(background, SWT.BORDER);
 		QuantitySpinner.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseUp(MouseEvent e) {
@@ -97,18 +105,35 @@ public class ItemChecklistStub extends Composite {
 	}
 
 	protected void RemoveFromCart() {
-//		Cart.RemoveFromCart();
+		Cart.removeFromCart(item.barcode, isFree);
+		if(saleStub != null){
+			saleStub.RemoveFromCart();
+		}
 		dispose();
 		parent.layout();
 			parent.pack();
 	}
 	
-	protected void updateAmount(int amount) {
+	public void updateAmount(int amount) {
 		item.amount = amount;
 		price = item.amount*item.price;
 		priceLabel.setText(numberFormat.format(price).toString()+"¤");
+		QuantitySpinner.setSelection(amount);
+		Cart.updateTotalPrice();
+		//if not enough bought for sale, remove some of the sale.
+		if(saleStub != null){
+			int timesSaleUsed = saleStub.item.amount/sale.item2_amount;
+			if(amount/sale.item1_amount < timesSaleUsed) {
+				int newSaleAmount = amount/sale.item1_amount;
+				saleStub.updateAmount(newSaleAmount*sale.item2_amount);
+				if(newSaleAmount == 0) {
+					saleStub.RemoveFromCart();
+				}
+			}
+		}
 		
 	}
+	
 
 	@Override
 	protected void checkSubclass() {

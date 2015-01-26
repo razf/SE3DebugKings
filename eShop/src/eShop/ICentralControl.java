@@ -1,5 +1,5 @@
 package eShop;
 
-public interface ICentralControl {
+public interface ICentralControl { //change
 
 }
